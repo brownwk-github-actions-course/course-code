@@ -2,7 +2,7 @@ name: Expressions & Contexts
 on: [push, pull_requests, issues, workflow_dispatch]
 
 jobs:
-  using-expressions-and-contexts
+  using-expressions-and-contexts:
     runs-on: ubuntu-latest
     steps:
       - name: Expressions
