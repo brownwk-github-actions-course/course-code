@@ -1,25 +1,26 @@
-name: Expressions & Contexts
-on: [push, pull_request, issues, workflow_dispatch]
-run-name: "Expressions & Contexts by @${{ github.actor }}, event: ${{ github.event_name }}"
+name: Mixed inputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        type: choice
+        description: Who to greet
+        options: 
+        - monalisa
+        - cschleiden
+      message:
+        required: true
+      use-emoji:
+        type: boolean
+        description: Include 🎉🤣 emojis
+      environment:
+        type: environment
+
 jobs:
-  using-expressions-and-contexts:
+  greet:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Expressions
-        id: expressions
-        run: |
-          echo ${{ 1 }}
-          echo ${{ 'This is a string' }}
-          echo ${{ null }}
-          echo ${{ true }}
-          echo ${{ 1 > 2 }}
-          echo ${{ 'string' == 'String' }}
-          echo ${{ true && false }}
-          echo ${{ 1 < 2 }}
-      - name: Dump Contexts
-        run: |
-          echo '${{ toJson(github) }}'
-          echo '${{ toJson(job) }}'
-          echo '${{ toJson(secrets) }}'
-          echo '${{ toJson(steps) }}'
-          echo '${{ toJson(runner) }}'
+    - name: Send greeting
+      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
